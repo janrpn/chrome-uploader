@@ -56,7 +56,7 @@ export default class Upload extends Component {
       CARELINK_DOWNLOADING: 'Downloading CareLink export...',
       MEDTRONIC_SERIAL_NUMBER: 'Pump Serial number',
       REMEMBER_SERIAL_NUMBER: 'Remember serial number',
-      MEDTRONIC_600_IS_LINKED: 'Next Link and pump are linked',
+      MEDTRONIC_600_IS_LINKED: 'Meter and pump are linked',
       LABEL_UPLOAD: 'Upload',
       LABEL_IMPORT: 'Import',
       LABEL_OK: 'OK',
@@ -269,6 +269,7 @@ export default class Upload extends Component {
       medtronic600FormIncomplete: !checked,
       medtronic600SerialNumberValue: checked ? '' :
         this.state.medtronic600SerialNumberValue,
+      medtronic600SerialNumberValid: true,
     });
   };
 
@@ -535,6 +536,15 @@ export default class Upload extends Component {
       return null;
     }
 
+    const divHidden = cx({
+      [styles.hidden]: this.state.medtronic600Linked,
+    });
+    
+    const serialInputStyle = cx({
+      [styles.textInput]: this.state.medtronic600SerialNumberValid,
+      [styles.textInputError]: !this.state.medtronic600SerialNumberValid,
+    });
+
     return (
       <div>
         <div className={styles.textInputWrapper}>
@@ -548,15 +558,13 @@ export default class Upload extends Component {
               {this.props.text.MEDTRONIC_600_IS_LINKED}
             </label>
           </div>
-          <div style={!this.state.medtronic600Linked ?
-            {} : { display: 'none' }}>
-            <p>Enter your 10 character pump serial number.</p>
+          <div className={divHidden}>
+            <p>Enter 10 character serial number.</p>
             <input
               type="text"
               value={this.state.medtronic600SerialNumberValue}
               onChange={this.onMedtronic600SerialNumberInputChange}
-              className={this.state.medtronic600SerialNumberValid ?
-                styles.textInput: styles.textInputError}
+              className={serialInputStyle}
               placeholder={this.props.text.MEDTRONIC_SERIAL_NUMBER} />
           </div>
         </div>
